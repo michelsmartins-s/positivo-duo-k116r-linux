@@ -65,7 +65,7 @@ Fix that worked:
 3. Hold the power button for 15 to 20 seconds (nothing will happen on screen).
 4. Wait 1 minute, plug the charger, boot.
 
-The interface then appeared as `wlx<mac>`. Combined with `usbcore.autosuspend=-1`. It may reappear intermittently; the power reset is the workaround. Do not call `modprobe rtl8xxxu` repeatedly while the chip is in a bad state: it can hang.
+The interface then appeared as `wlx<mac>`. This was combined with `usbcore.autosuspend=-1`. The problem may come back on a later boot, so the power reset is a workaround, not a confirmed permanent fix. Do not call `modprobe rtl8xxxu` repeatedly while the chip is in a bad state: it can hang.
 
 ## 3. Touchscreen does not work
 
@@ -117,7 +117,7 @@ Note: `LIBINPUT_CALIBRATION_MATRIX` udev rules had no effect under GNOME here.
 
 ## 5. Disable keyboard and touchpad in tablet mode
 
-The firmware does not report the fold event to Linux (not confirmed with `libinput debug-events`), so a manual toggle is used: `evtest --grab` on the internal keyboard plus disabling the touchpad via `gsettings`. See [files/toggle-teclado](files/toggle-teclado) and [files/toggle-teclado.desktop](files/toggle-teclado.desktop).
+Whether the firmware reports the fold event to Linux was not tested (run `sudo libinput debug-events` while folding the screen to check). Until then, a manual toggle is used: `evtest --grab` on the internal keyboard plus disabling the touchpad via `gsettings`. See [files/toggle-teclado](files/toggle-teclado) and [files/toggle-teclado.desktop](files/toggle-teclado.desktop).
 
 Requires a sudoers rule:
 
@@ -126,6 +126,17 @@ youruser ALL=(root) NOPASSWD: /usr/bin/evtest, /usr/bin/pkill
 ```
 
 Tip: keep an external keyboard or the on-screen keyboard available when testing.
+
+Install:
+
+```
+sudo cp files/toggle-teclado /usr/local/bin/toggle-teclado
+sudo chmod +x /usr/local/bin/toggle-teclado
+mkdir -p ~/.local/share/applications
+cp files/toggle-teclado.desktop ~/.local/share/applications/
+```
+
+Then add the sudoers rule above with `sudo visudo -f /etc/sudoers.d/toggle-teclado`. The GitHub web interface does not keep the executable bit, so `chmod +x` is required.
 
 ## 6. Recovering a boot problem (EFI Shell)
 
