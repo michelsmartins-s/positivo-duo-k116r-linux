@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Name=Teclado on/off
+Exec=/usr/local/bin/toggle-teclado
+Icon=input-keyboard
+Terminal=false
